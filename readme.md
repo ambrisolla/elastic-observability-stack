@@ -9,3 +9,6 @@ Execute the following command:
 ```bash
 $ ./setup.sh
 ```
+
+## License
+Apache License, Version 2.0
