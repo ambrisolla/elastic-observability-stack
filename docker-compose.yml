@@ -1,0 +1,35 @@
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.2
+    container_name: elasticsearch
+    ports:
+      - 9200:9200
+    mem_limit: 1G
+    environment:
+      - ELASTIC_PASSWORD=${ELASTICSEARCH_PASSWORD}
+      - discovery.type=single-node
+      - xpack.security.http.ssl.enabled=false
+    volumes:
+      - /usr/share/zoneinfo/America/Sao_Paulo:/etc/localtime
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.14.2
+    container_name: kibana
+    ports:
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD}
+    volumes:
+      - /usr/share/zoneinfo/America/Sao_Paulo:/etc/localtime
+  apm:
+    image: docker.elastic.co/apm/apm-server:8.14.2
+    container_name: apm
+    ports:
+      - "8200:8200"
+    volumes:
+      - /usr/share/zoneinfo/America/Sao_Paulo:/etc/localtime
+      - ${PWD}/apm-server.yml:/usr/share/apm-server/apm-server.yml
+volumes:
+  es_data:
+    driver: local
